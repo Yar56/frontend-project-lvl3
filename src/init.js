@@ -42,6 +42,7 @@ export default () => {
       form.reset();
       // рендер фидов и постов
     } else if (processState === 'failed') {
+      submitButton.disabled = false;
       renderFeedback(watchedState.formState.processError);
     }
   };
@@ -76,16 +77,18 @@ export default () => {
         .then((response) => {
           watchedState.formState.processSucces = 'RSS успешно загружен';
           watchedState.formState.processState = 'finished';
-          // watchedState.formState.processState = 'pending';
+          watchedState.formState.valid = true;
+          watchedState.formState.processState = 'pending';
           console.log(response);
         })
         .catch((error) => {
-          watchedState.formState.processState = 'pending';
           watchedState.formState.processError = 'Ошибка сети';
           watchedState.formState.processState = 'failed';
+          watchedState.formState.valid = true;
+          watchedState.formState.processState = 'pending';
           console.log(error);
         });
     }
+    console.log(state);
   });
-  console.log(state);
 };
