@@ -2,7 +2,6 @@ import onChange from 'on-change';
 import axios from 'axios';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
-// import * as yup from 'yup';
 
 export default () => {
   const state = {
@@ -32,22 +31,29 @@ export default () => {
     form.url.classList.toggle('is-invalid');
     divFeedBack.textContent = value;
   };
-  const renderFeeds = (feeds) => {
+  const renderFeeds = (watchedState) => {
     const feedsContainer = document.querySelector('.feeds');
-    feedsContainer.innerHTML = '';
-    const ul = document.createElement('ul');
-    ul.classList.add('list-group', 'mb-5');
-    const res = feeds.map((feed) => `
+    const ulfeed = document.createElement('ul');
+    ulfeed.classList.add('list-group', 'mb-5');
+    const feeds = watchedState.feeds.map((feed) => `
       <li class="list-group-item">
         <h3>${feed.title}</h3>
         <p>${feed.description}</p>
       </li>`);
-    feedsContainer.innerHTML = `<h2>Фиды</h2>${res.join('')}`;
-  };
-  // const renderPosts = (posts) => {
-  //   const postsContainer = document.querySelector('.feeds');
+    ulfeed.innerHTML = feeds.join('');
+    feedsContainer.innerHTML = `<h2>Фиды</h2>${ulfeed.outerHTML}`;
 
-  // };
+    const postsContainer = document.querySelector('.posts');
+    const ulpost = document.createElement('ul');
+    ulpost.classList.add('list-group');
+    const posts = watchedState.posts.map((post) => `
+      <li class="list-group-item d-flex justify-content-between align-items-start">
+        <a href="${post.link}" class="font-weight-bold" data-id="2" target="_blank" rel="noopener noreferrer">${post.postTitle}</a>
+        <button type="button" class="btn btn-primary btn-sm">Просмотр</button>
+      </li>`);
+    ulpost.innerHTML = posts.join('');
+    postsContainer.innerHTML = `<h2>Посты</h2>${ulpost.outerHTML}`;
+  };
 
   const processStateHandle = (processState, watchedState) => {
     if (processState === 'pending') {
@@ -58,7 +64,6 @@ export default () => {
       submitButton.disabled = false;
       renderFeedback(watchedState.formState.processSucces);
       form.reset();
-      // рендер фидов и постов
     } else if (processState === 'failed') {
       submitButton.disabled = false;
       renderFeedback(watchedState.formState.processError);
@@ -73,8 +78,8 @@ export default () => {
         renderFeedback(watchedState.formState.validError);
       }
     }
-    if (path === 'posts') {
-      renderFeeds(watchedState.feeds);
+    if (path === 'feeds' || path === 'posts') {
+      renderFeeds(watchedState);
     }
   });
 
@@ -103,13 +108,13 @@ export default () => {
 
           const [{ title, description }, postsContent] = parseXml(response.data.contents);
 
-          watchedState.feeds.push({
+          watchedState.feeds.unshift({
             id: 1,
             feedUrl,
             title,
             description,
           });
-          watchedState.posts = [...postsContent];
+          watchedState.posts.unshift(...postsContent);
         })
         .catch((error) => {
           watchedState.formState.processError = 'Ошибка сети';
@@ -119,6 +124,6 @@ export default () => {
           console.log(error);
         });
     }
-    // console.log(state);
+    console.log(state);
   });
 };
