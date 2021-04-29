@@ -1,6 +1,7 @@
 import onChange from 'on-change';
 import axios from 'axios';
 import validateUrl from './validateUrl.js';
+import parseXml from './parseRss.js';
 // import * as yup from 'yup';
 
 export default () => {
@@ -13,8 +14,8 @@ export default () => {
       validError: '',
 
     },
-    feed: [],
-    post: [],
+    feeds: [],
+    posts: [],
   };
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
@@ -28,8 +29,25 @@ export default () => {
     } else {
       divFeedBack.classList.add('text-danger');
     }
+    form.url.classList.toggle('is-invalid');
     divFeedBack.textContent = value;
   };
+  const renderFeeds = (feeds) => {
+    const feedsContainer = document.querySelector('.feeds');
+    feedsContainer.innerHTML = '';
+    const ul = document.createElement('ul');
+    ul.classList.add('list-group', 'mb-5');
+    const res = feeds.map((feed) => `
+      <li class="list-group-item">
+        <h3>${feed.title}</h3>
+        <p>${feed.description}</p>
+      </li>`);
+    feedsContainer.innerHTML = `<h2>Фиды</h2>${res.join('')}`;
+  };
+  // const renderPosts = (posts) => {
+  //   const postsContainer = document.querySelector('.feeds');
+
+  // };
 
   const processStateHandle = (processState, watchedState) => {
     if (processState === 'pending') {
@@ -51,10 +69,12 @@ export default () => {
       processStateHandle(value, watchedState);
     }
     if (path === 'formState.valid') {
-      // const divFeedBack = document.querySelector('.feedback');
       if (!value) {
         renderFeedback(watchedState.formState.validError);
       }
+    }
+    if (path === 'posts') {
+      renderFeeds(watchedState.feeds);
     }
   });
 
@@ -72,14 +92,24 @@ export default () => {
       watchedState.formState.valid = isValid;
     }
     if (isValid) {
-      // watchedState.formState.valid = isValid;
       axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(queryString)}`)
         .then((response) => {
           watchedState.formState.processSucces = 'RSS успешно загружен';
           watchedState.formState.processState = 'finished';
           watchedState.formState.valid = true;
           watchedState.formState.processState = 'pending';
-          console.log(response);
+
+          const feedUrl = response.data.status.url;
+
+          const [{ title, description }, postsContent] = parseXml(response.data.contents);
+
+          watchedState.feeds.push({
+            id: 1,
+            feedUrl,
+            title,
+            description,
+          });
+          watchedState.posts = [...postsContent];
         })
         .catch((error) => {
           watchedState.formState.processError = 'Ошибка сети';
@@ -89,6 +119,6 @@ export default () => {
           console.log(error);
         });
     }
-    console.log(state);
+    // console.log(state);
   });
 };
