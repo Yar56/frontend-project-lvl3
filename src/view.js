@@ -1,9 +1,17 @@
 import onChange from 'on-change';
+import { setLocale } from 'yup';
 
-export default (state, t) => {
+export default (state, i18nInstance) => {
+  setLocale({
+    string: {
+      url: i18nInstance.t('feedback.invalidUrl'),
+    },
+  });
+
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
   const divFeedBack = document.querySelector('.feedback');
+
   const renderFeedback = (value) => {
     divFeedBack.classList.remove('text-success', 'text-danger'); // нужно разобраться с классом формы
     if (value === 'RSS успешно загружен') {
@@ -46,11 +54,11 @@ export default (state, t) => {
       submitButton.disabled = true;
     } else if (processState === 'finished') {
       submitButton.disabled = false;
-      renderFeedback(t(watchedState.formState.processSucces));
+      renderFeedback(i18nInstance.t(watchedState.formState.processSucces));
       form.reset();
     } else if (processState === 'failed') {
       submitButton.disabled = false;
-      renderFeedback(t(watchedState.formState.processError));
+      renderFeedback(i18nInstance.t(watchedState.formState.processError));
     }
   };
 
@@ -59,7 +67,13 @@ export default (state, t) => {
       processStateHandle(value, watchedState);
     }
     if (path === 'formState.valid') {
-      renderFeedback(watchedState.formState.validError);
+      if (!value) {
+        divFeedBack.classList.toggle('text-danger');
+        form.url.classList.toggle('is-invalid');
+        divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
+      }
+      // divFeedBack.textContent = watchedState.formState.validError;
+      // renderFeedback(watchedState.formState.validError);
     }
     if (path === 'feeds' || path === 'posts') {
       renderFeeds(watchedState);

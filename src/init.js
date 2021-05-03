@@ -1,4 +1,4 @@
-import i18next from 'i18next';
+import i18n from 'i18next';
 import resources from './locales';
 import view from './view.js';
 import controller from './controller.js';
@@ -15,15 +15,17 @@ export default () => {
     feeds: [],
     posts: [],
   };
+
   const form = document.querySelector('.rss-form');
   const defaultLanguage = 'ru';
-  const i18nInstance = i18next.createInstance();
+  const i18nInstance = i18n.createInstance();
+
   i18nInstance.init({
     lng: defaultLanguage,
     debug: true,
     resources,
-  }).then((t) => {
-    const watchedState = view(state, t);
+  }).then(() => {
+    const watchedState = view(state, i18nInstance);
     form.addEventListener('submit', controller(watchedState));
   });
 };
