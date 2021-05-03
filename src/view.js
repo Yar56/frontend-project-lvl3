@@ -1,11 +1,10 @@
 import onChange from 'on-change';
 
-export default (state) => {
+export default (state, t) => {
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
+  const divFeedBack = document.querySelector('.feedback');
   const renderFeedback = (value) => {
-    const divFeedBack = document.querySelector('.feedback');
-    console.log(value);
     divFeedBack.classList.remove('text-success', 'text-danger'); // нужно разобраться с классом формы
     if (value === 'RSS успешно загружен') {
       divFeedBack.classList.add('text-success');
@@ -47,13 +46,14 @@ export default (state) => {
       submitButton.disabled = true;
     } else if (processState === 'finished') {
       submitButton.disabled = false;
-      renderFeedback(watchedState.formState.processSucces);
+      renderFeedback(t(watchedState.formState.processSucces));
       form.reset();
     } else if (processState === 'failed') {
       submitButton.disabled = false;
-      renderFeedback(watchedState.formState.processError);
+      renderFeedback(t(watchedState.formState.processError));
     }
   };
+
   const watchedState = onChange(state, (path, value) => {
     if (path === 'formState.processState') {
       processStateHandle(value, watchedState);
