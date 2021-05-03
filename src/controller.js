@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
 import checkDuplicateUrl from './checkDuplicateUrl.js';
@@ -35,16 +36,19 @@ export default (observer) => (e) => {
         watchedState.formState.valid = true;
         watchedState.formState.processState = 'pending';
 
-        const feedUrl = response.data.status.url;
         const [{ title, description }, postsContent] = parseXml(response.data.contents);
-
+        const feedId = _.uniqueId();
+        const postsWithId = postsContent.map((post) => {
+          _.set(post, 'feedId', feedId);
+          return post;
+        });
         watchedState.feeds.unshift({
-          id: 1,
-          feedUrl,
+          feedId,
+          feedUrl: queryString,
           title,
           description,
         });
-        watchedState.posts.unshift(...postsContent);
+        watchedState.posts.unshift(...postsWithId);
       })
       .catch((error) => {
         watchedState.formState.processError = 'Ошибка сети';
