@@ -55,4 +55,4 @@ export default (observer) => (e) => {
       });
   }
   console.log(watchedState);
-}
+};
