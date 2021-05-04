@@ -67,8 +67,6 @@ export default (state, i18nInstance) => {
       processStateHandle(value, watchedState);
     }
     if (path === 'formState.valid') {
-      divFeedBack.classList.remove('text-danger');
-      form.url.classList.remove('is-invalid');
       if (!value) {
         divFeedBack.classList.add('text-danger');
         form.url.classList.add('is-invalid');

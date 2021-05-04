@@ -23,7 +23,9 @@ export default (observer) => (e) => {
       watchedState.formState.valid = false;
     } else {
       watchedState.formState.processState = 'sending';
-      axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(queryString)}`)
+      const getRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
+
+      getRss(queryString)
         .then((response) => {
           watchedState.formState.processSucces = 'feedback.succesLoad';
           watchedState.formState.processState = 'finished';
@@ -42,6 +44,20 @@ export default (observer) => (e) => {
             description,
           });
           watchedState.posts.unshift(...postsWithId);
+          return response;
+        })
+        .then(() => {
+          const delay = 5000;
+
+          setTimeout(function request() {
+            getRss(queryString).then((res) => {
+              console.log(res.data.contents);
+              setTimeout(request, delay);
+            }).catch((err) => {
+              setTimeout(request, delay);
+              console.log(err);
+            });
+          }, delay);
         })
         .catch((error) => {
           watchedState.formState.processError = 'feedback.networkError';
@@ -52,7 +68,6 @@ export default (observer) => (e) => {
         });
     }
   }).catch(({ errors }) => {
-    // console.log(errors.toString());
     watchedState.formState.processSucces = '';
     watchedState.formState.validError = errors.toString();
     watchedState.formState.processState = 'pending';
