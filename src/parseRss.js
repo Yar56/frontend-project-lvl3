@@ -1,8 +1,6 @@
 const parse = (xmlString) => {
   const parser = new DOMParser();
   const document = parser.parseFromString(xmlString, 'application/xml');
-  // console.log(document);
-  // return document;
 
   const channel = document.querySelector('channel');
   const [title, description] = channel.children;

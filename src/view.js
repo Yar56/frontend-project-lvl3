@@ -13,7 +13,7 @@ export default (state, i18nInstance) => {
   const divFeedBack = document.querySelector('.feedback');
 
   const renderFeedback = (value) => {
-    divFeedBack.classList.remove('text-success', 'text-danger'); // нужно разобраться с классом формы
+    divFeedBack.classList.remove('text-success', 'text-danger');
     if (value === 'RSS успешно загружен') {
       divFeedBack.classList.add('text-success');
     } else {
@@ -67,13 +67,13 @@ export default (state, i18nInstance) => {
       processStateHandle(value, watchedState);
     }
     if (path === 'formState.valid') {
+      divFeedBack.classList.remove('text-danger');
+      form.url.classList.remove('is-invalid');
       if (!value) {
-        divFeedBack.classList.toggle('text-danger');
-        form.url.classList.toggle('is-invalid');
+        divFeedBack.classList.add('text-danger');
+        form.url.classList.add('is-invalid');
         divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
       }
-      // divFeedBack.textContent = watchedState.formState.validError;
-      // renderFeedback(watchedState.formState.validError);
     }
     if (path === 'feeds' || path === 'posts') {
       renderFeeds(watchedState);
