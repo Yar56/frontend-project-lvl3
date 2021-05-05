@@ -51,7 +51,9 @@ export default (observer) => (e) => {
 
           setTimeout(function request() {
             getRss(queryString).then((res) => {
-              console.log(res.data.contents);
+              console.log(res.data);
+              // const con = parseXml(res.data.contents);
+              // console.log(con)
               setTimeout(request, delay);
             }).catch((err) => {
               setTimeout(request, delay);
