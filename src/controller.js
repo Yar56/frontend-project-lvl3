@@ -6,6 +6,26 @@ import checkDuplicateUrl from './checkDuplicateUrl.js';
 
 const getRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
 
+const updateFeeds = (state, url) => {
+  getRss(url)
+    .then((res) => parseXml(res.data.contents))
+    .then(([{ title }, postsContent]) => {
+      const feed = state.feeds.find((el) => el.title === title);
+
+      const oldPosts = state.posts.filter(({ feedId }) => feedId === feed.feedId);
+
+      const newPosts = _.differenceBy(postsContent, oldPosts, 'link');
+
+      const newPostsWithId = newPosts.map((post) => ({
+        ...post,
+        feedId: feed.feedId,
+      }));
+      state.posts.unshift(...newPostsWithId);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => setTimeout(() => updateFeeds(state, url), 5000));
+};
+
 export default (observer) => (e) => {
   e.preventDefault();
   const watchedState = observer;
@@ -16,7 +36,6 @@ export default (observer) => (e) => {
   const isValid = validateUrl(queryString);
 
   isValid.then(() => {
-    // console.log(url)
     const isDuplicate = checkDuplicateUrl(watchedState.feeds, queryString);
     if (isDuplicate) {
       watchedState.formState.processSucces = '';
@@ -45,16 +64,7 @@ export default (observer) => (e) => {
           watchedState.posts.unshift(...postsWithId);
         })
         .then(() => {
-          const updateFeeds = (url) => {
-            getRss(url)
-              .then((res) => parseXml(res.data.contents))
-              .then(() => {
-
-              })
-              .catch((err) => console.log(err))
-              .finally(() => setTimeout(() => updateFeeds(url), 5000));
-          };
-          updateFeeds(queryString);
+          setTimeout(() => updateFeeds(watchedState, queryString), 5000);
         })
         .catch((error) => {
           watchedState.formState.processError = 'feedback.networkError';
