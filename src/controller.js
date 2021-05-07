@@ -48,13 +48,13 @@ export default (observer) => (e) => {
           const updateFeeds = (url) => {
             getRss(url)
               .then((res) => parseXml(res.data.contents))
-              .then((xml) => {
-                
+              .then(() => {
+
               })
               .catch((err) => console.log(err))
               .finally(() => setTimeout(() => updateFeeds(url), 5000));
           };
-          updateFeeds(queryString)
+          updateFeeds(queryString);
         })
         .catch((error) => {
           watchedState.formState.processError = 'feedback.networkError';
