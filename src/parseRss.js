@@ -8,12 +8,13 @@ const parse = (xmlString) => {
   const posts = Array.from(channel.children).filter((el) => el.tagName === 'item');
 
   const postsContent = posts.reduce((acc, item) => {
-    const [postTitle, link] = Array.from(item.children)
-      .filter((el) => el.tagName === 'title' || el.tagName === 'link')
+    const [postTitle, link, postDescription] = Array.from(item.children)
+      .filter((el) => el.tagName === 'title' || el.tagName === 'link' || el.tagName === 'description')
       .map((el) => el.textContent);
     acc.push({
       postTitle,
       link,
+      postDescription,
     });
     return acc;
   }, []);

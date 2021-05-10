@@ -11,11 +11,8 @@ const updateFeeds = (state, url) => {
     .then((res) => parseXml(res.data.contents))
     .then(([{ title }, postsContent]) => {
       const feed = state.feeds.find((el) => el.title === title);
-
       const oldPosts = state.posts.filter(({ feedId }) => feedId === feed.feedId);
-
       const newPosts = _.differenceBy(postsContent, oldPosts, 'link');
-
       const newPostsWithId = newPosts.map((post) => ({
         ...post,
         feedId: feed.feedId,
@@ -49,19 +46,22 @@ export default (observer) => (e) => {
           watchedState.formState.processSucces = 'feedback.succesLoad';
           watchedState.formState.processState = 'finished';
           watchedState.formState.valid = true;
+
           const [{ title, description }, postsContent] = parseXml(response.data.contents);
           const feedId = _.uniqueId();
           const postsWithId = postsContent.map((post) => {
+            _.set(post, 'state', 'active');
+            _.set(post, 'id', _.uniqueId());
             _.set(post, 'feedId', feedId);
             return post;
           });
+          watchedState.posts.unshift(...postsWithId);
           watchedState.feeds.unshift({
             feedId,
             feedUrl: queryString,
             title,
             description,
           });
-          watchedState.posts.unshift(...postsWithId);
         })
         .then(() => {
           setTimeout(() => updateFeeds(watchedState, queryString), 5000);
