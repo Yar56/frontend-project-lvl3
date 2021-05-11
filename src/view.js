@@ -38,9 +38,15 @@ export default (state, i18nInstance) => {
     feedsContainer.innerHTML = `<h2>Фиды</h2>${ulfeed.outerHTML}`;
   };
 
-  const renderModal = (content) => {
-    // const postLink = document.querySelector(`a[data-id="${postId}"]`);
-    // const modal = document.getElementById('modal')
+  const renderModal = (content, link, postState) => {
+    link.classList.remove('fw-bold', 'fw-normal');
+
+    if (postState === 'active') {
+      link.classList.add('fw-bold');
+    }
+    if (postState === 'inactive') {
+      link.classList.add('fw-normal');
+    }
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
@@ -54,29 +60,19 @@ export default (state, i18nInstance) => {
     const ulpost = document.createElement('ul');
     ulpost.classList.add('list-group');
 
-    // const postsContent = posts.map((post) => `
-    // <li class="list-group-item d-flex justify-content-between align-items-start">
-    //   <a href="${post.link}" class="fw-bold" data-id="2" target="_blank"
-    // rel="noopener noreferrer">${post.postTitle}</a>
-    //   <button type="button" class="btn btn-primary btn-sm" data-id="2"
-    // data-toggle="modal" data-target="#modal">Просмотр</button>
-    // </li>`);
-    // ulpost.innerHTML = postsContent.join('');
-
     posts.map((post) => {
       const li = document.createElement('li');
       li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
       const a = document.createElement('a');
       const btn = document.createElement('button');
 
-      // postLink.classList.remove('fw-bold', 'fw-normal');
+      if (post.state === 'active') {
+        a.classList.add('fw-bold');
+      }
+      if (post.state === 'inactive') {
+        a.classList.add('fw-normal');
+      }
 
-      // if (post.state === 'active') {
-      //   a.classList.add('fw-bold');
-      // } else if (post.state === 'inactive') {
-      //   a.classList.add('fw-normal');
-      // }
-      // a.classList.add('fw-bold');
       a.setAttribute('href', `${post.link}`);
       a.setAttribute('data-id', `${post.id}`);
       a.setAttribute('target', '_blank');
@@ -92,8 +88,7 @@ export default (state, i18nInstance) => {
         const { id } = e.target.dataset;
         const currentPost = posts.find((el) => el.id === id);
         currentPost.state = 'inactive';
-
-        renderModal(post, id, currentPost.state);
+        renderModal(post, a, currentPost.state);
       });
       li.appendChild(a);
       li.appendChild(btn);
