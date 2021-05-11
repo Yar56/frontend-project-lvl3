@@ -30,8 +30,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'My App',
       template: './index.html',
+      scriptLoading: 'defer',
     }),
   ],
 };
