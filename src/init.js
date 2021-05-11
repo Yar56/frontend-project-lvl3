@@ -3,6 +3,11 @@ import resources from './locales';
 import view from './view.js';
 import controller from './controller.js';
 
+const setEvent = (state) => {
+  const form = document.querySelector('.rss-form');
+  form.addEventListener('submit', controller(state));
+};
+
 export default () => {
   const state = {
     formState: {
@@ -16,7 +21,6 @@ export default () => {
     posts: [],
   };
 
-  const form = document.querySelector('.rss-form');
   const defaultLanguage = 'ru';
   const i18nInstance = i18n.createInstance();
 
@@ -24,8 +28,8 @@ export default () => {
     lng: defaultLanguage,
     debug: false,
     resources,
-  }).then(() => {
-    const watchedState = view(state, i18nInstance);
-    form.addEventListener('submit', controller(watchedState));
   });
+
+  const watchedState = view(state, i18nInstance);
+  setEvent(watchedState);
 };
