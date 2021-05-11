@@ -24,8 +24,7 @@ export default () => {
     lng: defaultLanguage,
     debug: false,
     resources,
-  }).then(() => {
-    const watchedState = view(state, i18nInstance);
-    form.addEventListener('submit', controller(watchedState));
   });
+  const watchedState = view(state, i18nInstance);
+  form.addEventListener('submit', controller(watchedState));
 };

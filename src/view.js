@@ -1,5 +1,6 @@
 import onChange from 'on-change';
 import { setLocale } from 'yup';
+// import 'bootstrap/js/src/modal';
 
 export default (state, i18nInstance) => {
   setLocale({
