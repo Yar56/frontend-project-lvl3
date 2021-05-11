@@ -16,7 +16,6 @@ export default () => {
     posts: [],
   };
 
-  const form = document.querySelector('.rss-form');
   const defaultLanguage = 'ru';
   const i18nInstance = i18n.createInstance();
 
@@ -25,6 +24,8 @@ export default () => {
     debug: false,
     resources,
   });
+
+  const form = document.querySelector('.rss-form');
   const watchedState = view(state, i18nInstance);
   form.addEventListener('submit', controller(watchedState));
 };
