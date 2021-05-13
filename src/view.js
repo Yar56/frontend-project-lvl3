@@ -12,15 +12,18 @@ export default (state, i18nInstance) => {
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
   const divFeedBack = document.querySelector('.feedback');
+  // const input = document.querySelector('.rss-form input');
 
   const renderFeedback = (value) => {
     divFeedBack.classList.remove('text-success', 'text-danger');
     if (value === 'RSS успешно загружен') {
       divFeedBack.classList.add('text-success');
-    } else {
-      form.url.classList.add('is-invalid');
-      divFeedBack.classList.add('text-danger');
     }
+    // } else {
+    //   // form.url.classList.add('is-invalid');
+    //   // input.classList.add('is-invalid');
+    //   divFeedBack.classList.add('text-danger');
+    // }
 
     divFeedBack.textContent = value;
   };
@@ -124,6 +127,9 @@ export default (state, i18nInstance) => {
         divFeedBack.classList.add('text-danger');
         form.url.classList.add('is-invalid');
         divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
+      }
+      if (value) {
+        form.url.classList.remove('is-invalid');
       }
     }
     if (path === 'posts') {
