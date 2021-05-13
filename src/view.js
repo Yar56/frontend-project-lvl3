@@ -18,7 +18,6 @@ export default (state, i18nInstance) => {
     if (value === 'RSS успешно загружен') {
       divFeedBack.classList.add('text-success');
     } else {
-      console.log(form.url)
       form.url.classList.add('is-invalid');
       divFeedBack.classList.add('text-danger');
     }
