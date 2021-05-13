@@ -3,5 +3,5 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import runApp from './src/init.js';
 
+// export default runApp;
 runApp();
-export default runApp;
