@@ -79,5 +79,5 @@ export default (observer) => (e) => {
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
   });
-  console.log(watchedState);
+  // console.log(watchedState);
 };
