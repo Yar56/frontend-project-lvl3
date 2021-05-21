@@ -73,12 +73,13 @@ export default (observer) => (e) => {
           console.log(error);
         });
     }
-  }).catch(({ errors }) => {
+  }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
-    watchedState.formState.validError = errors.toString();
+    // console.log(message);
+    watchedState.formState.validError = message;
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
-    console.log(errors);
+    // console.log(errors);
   });
   // console.log(watchedState);
 };
