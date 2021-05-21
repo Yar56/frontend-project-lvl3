@@ -16,7 +16,7 @@ export default () => {
     posts: [],
   };
 
-  const defaultLanguage = 'en';
+  const defaultLanguage = 'ru';
   const i18nInstance = i18n.createInstance();
 
   i18nInstance.init({
