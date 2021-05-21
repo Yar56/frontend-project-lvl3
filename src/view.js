@@ -18,14 +18,11 @@ export default (state, i18nInstance) => {
     divFeedBack.classList.remove('text-success', 'text-danger');
     if (value === 'RSS успешно загружен') {
       divFeedBack.classList.add('text-success');
+      divFeedBack.textContent = value;
+    } else if (value === 'Ошибка сети') {
+      divFeedBack.classList.add('text-danger');
+      divFeedBack.textContent = value;
     }
-    // } else {
-    //   // form.url.classList.add('is-invalid');
-    //   // input.classList.add('is-invalid');
-    //   divFeedBack.classList.add('text-danger');
-    // }
-
-    divFeedBack.textContent = value;
   };
 
   const renderFeeds = (feeds) => {

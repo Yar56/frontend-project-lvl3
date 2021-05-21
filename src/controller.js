@@ -66,11 +66,11 @@ export default (observer) => (e) => {
         .then(() => {
           setTimeout(() => updateFeeds(watchedState, queryString), 5000);
         })
-        .catch(() => {
+        .catch((error) => {
           watchedState.formState.processError = 'feedback.networkError';
           watchedState.formState.processState = 'failed';
           watchedState.formState.valid = true;
-          // console.log(error);
+          console.log(error);
         });
     }
   }).catch(({ errors }) => {
@@ -78,6 +78,7 @@ export default (observer) => (e) => {
     watchedState.formState.validError = errors.toString();
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
+    console.log(errors);
   });
   // console.log(watchedState);
 };
