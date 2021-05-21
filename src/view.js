@@ -14,15 +14,10 @@ export default (state, i18nInstance) => {
   const divFeedBack = document.querySelector('.feedback');
   // const input = document.querySelector('.rss-form input');
 
-  const renderFeedback = (value) => {
+  const renderFeedback = (value, style) => {
     divFeedBack.classList.remove('text-success', 'text-danger');
-    if (value === 'RSS успешно загружен') {
-      divFeedBack.classList.add('text-success');
-      divFeedBack.textContent = value;
-    } else if (value === 'Ошибка сети') {
-      divFeedBack.classList.add('text-danger');
-      divFeedBack.textContent = value;
-    }
+    divFeedBack.classList.add(style);
+    divFeedBack.textContent = value;
   };
 
   const renderFeeds = (feeds) => {
@@ -107,11 +102,11 @@ export default (state, i18nInstance) => {
       submitButton.disabled = true;
     } else if (processState === 'finished') {
       submitButton.disabled = false;
-      renderFeedback(i18nInstance.t(watchedState.formState.processSucces));
+      renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
       form.reset();
     } else if (processState === 'failed') {
       submitButton.disabled = false;
-      renderFeedback(i18nInstance.t(watchedState.formState.processError));
+      renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
     }
   };
 

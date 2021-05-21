@@ -75,11 +75,11 @@ export default (observer) => (e) => {
     }
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
-    // console.log(message);
+    console.log(message);
     watchedState.formState.validError = message;
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
     // console.log(errors);
   });
-  // console.log(watchedState);
+  console.log(watchedState);
 };
