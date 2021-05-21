@@ -66,11 +66,11 @@ export default (observer) => (e) => {
         .then(() => {
           setTimeout(() => updateFeeds(watchedState, queryString), 5000);
         })
-        .catch((error) => {
+        .catch(() => {
           watchedState.formState.processError = 'feedback.networkError';
           watchedState.formState.processState = 'failed';
           watchedState.formState.valid = true;
-          console.log(error);
+          // console.log(error);
         });
     }
   }).catch(({ errors }) => {
