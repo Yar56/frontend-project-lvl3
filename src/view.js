@@ -37,13 +37,13 @@ export default (state, i18nInstance) => {
   };
 
   const renderModal = (content, link, postState) => {
-    link.classList.remove('fw-bold', 'fw-normal');
+    link.classList.remove('font-weight-bold', 'font-weight-normal');
 
     if (postState === 'active') {
-      link.classList.add('fw-bold');
+      link.classList.add('font-weight-bold');
     }
     if (postState === 'inactive') {
-      link.classList.add('fw-normal');
+      link.classList.add('font-weight-normal');
     }
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
