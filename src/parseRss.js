@@ -1,4 +1,4 @@
-const parse = (xmlString) => {
+export default (xmlString) => {
   const parser = new DOMParser();
   const document = parser.parseFromString(xmlString, 'application/xml');
   const parsererrorNS = parser.parseFromString('INVALID', 'application/xml').getElementsByTagName('parsererror')[0].namespaceURI;
@@ -31,4 +31,3 @@ const parse = (xmlString) => {
     postsContent,
   ];
 };
-export default parse;
