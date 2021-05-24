@@ -65,10 +65,10 @@ export default (state, i18nInstance) => {
       const btn = document.createElement('button');
 
       if (post.state === 'active') {
-        a.classList.add('fw-bold');
+        a.classList.add('font-weight-bold');
       }
       if (post.state === 'inactive') {
-        a.classList.add('fw-normal');
+        a.classList.add('font-weight-normal');
       }
 
       a.setAttribute('href', `${post.link}`);
@@ -102,7 +102,7 @@ export default (state, i18nInstance) => {
     if (input.hasAttribute('readonly')) {
       input.removeAttribute('readonly', '');
     }
-    if (processState === 'pending') {
+    if (processState === 'pending') { // switch
       submitButton.disabled = false;
     } else if (processState === 'sending') {
       input.setAttribute('readonly', '');
