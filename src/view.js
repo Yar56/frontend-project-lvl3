@@ -101,18 +101,23 @@ export default (state, i18nInstance) => {
     if (input.hasAttribute('readonly')) {
       input.removeAttribute('readonly', '');
     }
-    if (processState === 'pending') { // switch
+    if (submitButton.hasAttribute('disabled')) {
       submitButton.disabled = false;
-    } else if (processState === 'sending') {
-      input.setAttribute('readonly', '');
-      submitButton.disabled = true;
-    } else if (processState === 'finished') {
-      submitButton.disabled = false;
-      renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
-      form.reset();
-    } else if (processState === 'failed') {
-      submitButton.disabled = false;
-      renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
+    }
+    switch (processState) {
+      case 'sending':
+        input.setAttribute('readonly', '');
+        submitButton.disabled = true;
+        break;
+      case 'finished':
+        renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
+        form.reset();
+        break;
+      case 'failed':
+        renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
+        break;
+      default:
+        break;
     }
   };
 
