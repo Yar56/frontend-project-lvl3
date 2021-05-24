@@ -15,6 +15,7 @@ export default (state, i18nInstance) => {
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
   const divFeedBack = document.querySelector('.feedback');
+  const input = document.querySelector('.rss-form input');
 
   const renderFeedback = (value, style) => {
     divFeedBack.classList.remove('text-success', 'text-danger');
@@ -119,11 +120,11 @@ export default (state, i18nInstance) => {
     if (path === 'formState.valid') {
       if (!value) {
         divFeedBack.classList.add('text-danger');
-        form.url.classList.add('is-invalid');
+        input.classList.add('is-invalid');
         divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
       }
       if (value) {
-        form.url.classList.remove('is-invalid');
+        input.classList.remove('is-invalid');
       }
     }
     if (path === 'posts') {
