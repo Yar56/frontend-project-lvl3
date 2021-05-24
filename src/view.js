@@ -99,9 +99,13 @@ export default (state, i18nInstance) => {
   };
 
   const processStateHandle = (processState, watchedState) => {
+    if (input.hasAttribute('readonly')) {
+      input.removeAttribute('readonly', '');
+    }
     if (processState === 'pending') {
       submitButton.disabled = false;
     } else if (processState === 'sending') {
+      input.setAttribute('readonly', '');
       submitButton.disabled = true;
     } else if (processState === 'finished') {
       submitButton.disabled = false;
