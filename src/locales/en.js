@@ -8,6 +8,7 @@ export default {
       invalidUrl: 'The link must be a valid URL',
       succesLoad: 'RSS loaded successfully',
       networkError: 'Network error',
+      invalidResource: 'Resource does not contain valid RSS',
     },
   },
 };

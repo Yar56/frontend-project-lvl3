@@ -36,11 +36,12 @@ export default (observer) => (e) => {
     watchedState.formState.processState = 'sending';
     getRss(queryString)
       .then((response) => {
+        const [{ title, description }, postsContent] = parseXml(response.data.contents);
+
         watchedState.formState.processSucces = 'feedback.succesLoad';
         watchedState.formState.processState = 'finished';
         watchedState.formState.valid = true;
 
-        const [{ title, description }, postsContent] = parseXml(response.data.contents);
         const feedId = _.uniqueId();
         const postsWithId = postsContent.map((post) => {
           _.set(post, 'state', 'active');
@@ -60,10 +61,15 @@ export default (observer) => (e) => {
         setTimeout(() => updateFeeds(watchedState, queryString), 5000);
       })
       .catch((error) => {
+        if (error.message === 'Error parsing XML') {
+          watchedState.formState.processError = 'feedback.invalidResource';
+          watchedState.formState.processState = 'failed';
+          watchedState.formState.valid = true;
+        }
         watchedState.formState.processError = 'feedback.networkError';
         watchedState.formState.processState = 'failed';
         watchedState.formState.valid = true;
-        console.log(error);
+        // console.log(error.message);
       });
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
