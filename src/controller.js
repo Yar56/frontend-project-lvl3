@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
-import checkDuplicateUrl from './checkDuplicateUrl.js';
+// import checkDuplicateUrl from './checkDuplicateUrl.js';
 
 const getRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}&disableCache=true`);
 
@@ -30,56 +30,46 @@ export default (observer) => (e) => {
 
   const data = new FormData(e.currentTarget);
   const queryString = data.get('url');
-  const isValid = validateUrl(queryString);
+  const isValid = validateUrl(watchedState.feeds, queryString);
 
   isValid.then(() => {
-    const isDuplicate = checkDuplicateUrl(watchedState.feeds, queryString);
-    if (isDuplicate) {
-      watchedState.formState.processSucces = '';
-      watchedState.formState.validError = 'feedback.duplicate';
-      watchedState.formState.processState = 'pending';
-      watchedState.formState.valid = false;
-    } else {
-      watchedState.formState.processState = 'sending';
-      getRss(queryString)
-        .then((response) => {
-          watchedState.formState.processSucces = 'feedback.succesLoad';
-          watchedState.formState.processState = 'finished';
-          watchedState.formState.valid = true;
+    watchedState.formState.processState = 'sending';
+    getRss(queryString)
+      .then((response) => {
+        watchedState.formState.processSucces = 'feedback.succesLoad';
+        watchedState.formState.processState = 'finished';
+        watchedState.formState.valid = true;
 
-          const [{ title, description }, postsContent] = parseXml(response.data.contents);
-          const feedId = _.uniqueId();
-          const postsWithId = postsContent.map((post) => {
-            _.set(post, 'state', 'active');
-            _.set(post, 'id', _.uniqueId());
-            _.set(post, 'feedId', feedId);
-            return post;
-          });
-          watchedState.posts.unshift(...postsWithId);
-          watchedState.feeds.unshift({
-            feedId,
-            feedUrl: queryString,
-            title,
-            description,
-          });
-        })
-        .then(() => {
-          setTimeout(() => updateFeeds(watchedState, queryString), 5000);
-        })
-        .catch((error) => {
-          watchedState.formState.processError = 'feedback.networkError';
-          watchedState.formState.processState = 'failed';
-          watchedState.formState.valid = true;
-          console.log(error);
+        const [{ title, description }, postsContent] = parseXml(response.data.contents);
+        const feedId = _.uniqueId();
+        const postsWithId = postsContent.map((post) => {
+          _.set(post, 'state', 'active');
+          _.set(post, 'id', _.uniqueId());
+          _.set(post, 'feedId', feedId);
+          return post;
         });
-    }
+        watchedState.posts.unshift(...postsWithId);
+        watchedState.feeds.unshift({
+          feedId,
+          feedUrl: queryString,
+          title,
+          description,
+        });
+      })
+      .then(() => {
+        setTimeout(() => updateFeeds(watchedState, queryString), 5000);
+      })
+      .catch((error) => {
+        watchedState.formState.processError = 'feedback.networkError';
+        watchedState.formState.processState = 'failed';
+        watchedState.formState.valid = true;
+        console.log(error);
+      });
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
-    console.log(message);
     watchedState.formState.validError = message;
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
-    // console.log(errors);
   });
   console.log(watchedState);
 };

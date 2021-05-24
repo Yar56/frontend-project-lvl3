@@ -7,12 +7,14 @@ export default (state, i18nInstance) => {
     string: {
       url: i18nInstance.t('feedback.invalidUrl'),
     },
+    mixed: {
+      default: i18nInstance.t('feedback.duplicate'),
+    },
   });
 
   const form = document.querySelector('.rss-form');
   const submitButton = document.querySelector('button[type="submit"]');
   const divFeedBack = document.querySelector('.feedback');
-  // const input = document.querySelector('.rss-form input');
 
   const renderFeedback = (value, style) => {
     divFeedBack.classList.remove('text-success', 'text-danger');

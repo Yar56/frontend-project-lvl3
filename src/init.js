@@ -21,7 +21,7 @@ export default () => {
 
   i18nInstance.init({
     lng: defaultLanguage,
-    debug: true,
+    debug: false,
     resources,
   });
 
