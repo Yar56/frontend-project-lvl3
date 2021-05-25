@@ -10,16 +10,17 @@ export default (state, i18nInstance) => {
       default: i18nInstance.t('feedback.duplicate'),
     },
   });
-
-  const form = document.querySelector('.rss-form');
-  const submitButton = document.querySelector('button[type="submit"]');
-  const divFeedBack = document.querySelector('.feedback');
-  const input = document.querySelector('.rss-form input');
+  const elements = {
+    form: document.querySelector('.rss-form'),
+    submitButton: document.querySelector('button[type="submit"]'),
+    divFeedBack: document.querySelector('.feedback'),
+    input: document.querySelector('.rss-form input'),
+  };
 
   const renderFeedback = (value, style) => {
-    divFeedBack.classList.remove('text-success', 'text-danger');
-    divFeedBack.classList.add(style);
-    divFeedBack.textContent = value;
+    elements.divFeedBack.classList.remove('text-success', 'text-danger');
+    elements.divFeedBack.classList.add(style);
+    elements.divFeedBack.textContent = value;
   };
 
   const renderFeeds = (feeds) => {
@@ -98,20 +99,20 @@ export default (state, i18nInstance) => {
   };
 
   const processStateHandle = (processState, watchedState) => {
-    if (input.hasAttribute('readonly')) {
-      input.removeAttribute('readonly', '');
+    if (elements.input.hasAttribute('readonly')) {
+      elements.input.removeAttribute('readonly', '');
     }
-    if (submitButton.hasAttribute('disabled')) {
-      submitButton.disabled = false;
+    if (elements.submitButton.hasAttribute('disabled')) {
+      elements.submitButton.disabled = false;
     }
     switch (processState) {
       case 'sending':
-        input.setAttribute('readonly', '');
-        submitButton.disabled = true;
+        elements.input.setAttribute('readonly', '');
+        elements.submitButton.disabled = true;
         break;
       case 'finished':
         renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
-        form.reset();
+        elements.form.reset();
         break;
       case 'failed':
         renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
@@ -121,25 +122,33 @@ export default (state, i18nInstance) => {
     }
   };
 
+  const validationHandle = (isValid, watchedState) => {
+    if (!isValid) {
+      elements.divFeedBack.classList.add('text-danger');
+      elements.input.classList.add('is-invalid');
+      elements.divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
+    }
+    if (isValid) {
+      elements.input.classList.remove('is-invalid');
+    }
+  };
+
   const watchedState = onChange(state, (path, value) => {
-    if (path === 'formState.processState') {
-      processStateHandle(value, watchedState);
-    }
-    if (path === 'formState.valid') {
-      if (!value) {
-        divFeedBack.classList.add('text-danger');
-        input.classList.add('is-invalid');
-        divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
-      }
-      if (value) {
-        input.classList.remove('is-invalid');
-      }
-    }
-    if (path === 'posts') {
-      renderPosts(watchedState.posts);
-    }
-    if (path === 'feeds') {
-      renderFeeds(watchedState.feeds);
+    switch (path) {
+      case 'formState.processState':
+        processStateHandle(value, watchedState);
+        break;
+      case 'formState.valid':
+        validationHandle(value, watchedState);
+        break;
+      case 'posts':
+        renderPosts(watchedState.posts);
+        break;
+      case 'feeds':
+        renderFeeds(watchedState.feeds);
+        break;
+      default:
+        break;
     }
   });
   return watchedState;
