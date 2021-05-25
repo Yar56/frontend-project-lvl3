@@ -1,7 +1,6 @@
-import 'bootstrap';
-// import 'bootstrap/js/dist/modal';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/js/dist/modal.js';
+import 'bootstrap/dist/css/bootstrap-grid.css';
+import 'bootstrap/dist/css/bootstrap.css';
 import runApp from './src/init.js';
 
-// export default runApp;
 runApp();

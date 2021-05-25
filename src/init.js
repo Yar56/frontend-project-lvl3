@@ -6,7 +6,7 @@ import controller from './controller.js';
 export default () => {
   const state = {
     formState: {
-      processState: 'pending', // sending
+      processState: 'pending',
       processError: null,
       processSucces: null,
       valid: true,

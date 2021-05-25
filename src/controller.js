@@ -2,7 +2,6 @@ import axios from 'axios';
 import _ from 'lodash';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
-// import checkDuplicateUrl from './checkDuplicateUrl.js';
 
 const getRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}&disableCache=true`);
 
@@ -69,7 +68,6 @@ export default (observer) => (e) => {
         watchedState.formState.processError = 'feedback.networkError';
         watchedState.formState.processState = 'failed';
         watchedState.formState.valid = true;
-        // console.log(error.message);
       });
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
@@ -77,5 +75,4 @@ export default (observer) => (e) => {
     watchedState.formState.processState = 'pending';
     watchedState.formState.valid = false;
   });
-  console.log(watchedState);
 };
