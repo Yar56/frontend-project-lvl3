@@ -5,25 +5,28 @@ export default (xml) => {
   if (document.getElementsByTagNameNS(parsererrorNS, 'parsererror').length > 0) {
     throw new Error('Error parsing XML');
   }
-  // const channel = document.querySelector('channel');
-  // console.log([...channel.children])
 
   const title = document.querySelector('title');
   const description = document.querySelector('description');
   const posts = Array.from(document.querySelectorAll('item'));
 
-  const postsContent = posts.reduce((acc, item) => {
-    const [postTitle, link, postDescription] = Array.from(item.children)
-      .filter((el) => el.tagName === 'title' || el.tagName === 'link' || el.tagName === 'description')
-      .map((el) => el.textContent);
-    acc.push({
-      postTitle,
-      link,
-      postDescription,
-    });
-    return acc;
-  }, []);
+  const getContent = (item) => {
+    const tagNames = ['title', 'link', 'description'];
+    const mapping = {
+      title: (el) => el.textContent,
+      link: (el) => el.textContent,
+      description: (el) => el.textContent,
+    };
 
+    return Array.from(item.children)
+      .filter((el) => tagNames.includes(el.tagName))
+      .reduce((acc, el) => {
+        acc[`${el.tagName}`] = mapping[el.tagName](el);
+        return acc;
+      }, {});
+  };
+
+  const postsContent = Array.from(posts).map((item) => getContent(item));
   return [
     {
       title: title.textContent,

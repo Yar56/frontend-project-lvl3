@@ -56,8 +56,8 @@ export default (state, i18nInstance) => {
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
-    modalTitle.textContent = content.postTitle;
-    modalBody.textContent = content.postDescription;
+    modalTitle.textContent = content.title;
+    modalBody.textContent = content.description;
     modalLink.setAttribute('href', content.link);
   };
 
@@ -83,7 +83,7 @@ export default (state, i18nInstance) => {
       a.setAttribute('data-id', `${post.id}`);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
-      a.textContent = post.postTitle;
+      a.textContent = post.title;
       btn.classList.add('btn', 'btn-primary', 'btn-sm');
       btn.setAttribute('type', 'button');
       btn.setAttribute('data-id', `${post.id}`);
