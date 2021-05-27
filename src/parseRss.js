@@ -1,15 +1,14 @@
-export default (xmlString) => {
+export default (xml) => {
   const parser = new DOMParser();
-  const document = parser.parseFromString(xmlString, 'application/xml');
+  const document = parser.parseFromString(xml, 'application/xml');
   const parsererrorNS = parser.parseFromString('INVALID', 'application/xml').getElementsByTagName('parsererror')[0].namespaceURI;
   if (document.getElementsByTagNameNS(parsererrorNS, 'parsererror').length > 0) {
     throw new Error('Error parsing XML');
   }
   const channel = document.querySelector('channel');
-
   const [title, description] = [...channel.children].filter((el) => el.tagName === 'title' || el.tagName === 'description');
 
-  const posts = Array.from(channel.children).filter((el) => el.tagName === 'item');
+  const posts = Array.from(document.querySelectorAll('item'));
 
   const postsContent = posts.reduce((acc, item) => {
     const [postTitle, link, postDescription] = Array.from(item.children)
