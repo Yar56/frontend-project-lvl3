@@ -22,6 +22,53 @@ const updateFeeds = (state, url) => {
     .finally(() => setTimeout(() => updateFeeds(state, url), 5000));
 };
 
+const handleGetRequest = (feedUrl, state) => {
+  const {
+    formState,
+    posts,
+    feeds,
+  } = state;
+
+  getRss(feedUrl)
+    .then((response) => {
+      const [{ title, description }, postsContent] = parseXml(response.data.contents);
+
+      formState.processSucces = 'feedback.succesLoad';
+      formState.processState = 'finished';
+      formState.valid = true;
+
+      const feedId = _.uniqueId();
+      const postsWithId = postsContent.map((post) => {
+        _.set(post, 'state', 'active');
+        _.set(post, 'id', _.uniqueId());
+        _.set(post, 'feedId', feedId);
+        return post;
+      });
+      posts.unshift(...postsWithId);
+      feeds.unshift({
+        feedId,
+        feedUrl,
+        title,
+        description,
+      });
+    })
+    .then(() => {
+      setTimeout(() => updateFeeds(state, feedUrl), 5000);
+    })
+    .catch((error) => {
+      if (error.message === 'Error parsing XML') {
+        formState.processError = 'feedback.invalidResource';
+        formState.processState = 'failed';
+        formState.valid = true;
+      }
+      if (error.message === 'Network Error') {
+        formState.processError = 'feedback.networkError';
+        formState.processState = 'failed';
+        formState.valid = true;
+      }
+    });
+};
+
 export default (observer) => (buttonEvent) => {
   buttonEvent.preventDefault();
   const watchedState = observer;
@@ -33,44 +80,7 @@ export default (observer) => (buttonEvent) => {
 
   isValid.then(() => {
     watchedState.formState.processState = 'sending';
-    getRss(feedUrl)
-      .then((response) => {
-        const [{ title, description }, postsContent] = parseXml(response.data.contents);
-
-        watchedState.formState.processSucces = 'feedback.succesLoad';
-        watchedState.formState.processState = 'finished';
-        watchedState.formState.valid = true;
-
-        const feedId = _.uniqueId();
-        const postsWithId = postsContent.map((post) => {
-          _.set(post, 'state', 'active');
-          _.set(post, 'id', _.uniqueId());
-          _.set(post, 'feedId', feedId);
-          return post;
-        });
-        watchedState.posts.unshift(...postsWithId);
-        watchedState.feeds.unshift({
-          feedId,
-          feedUrl,
-          title,
-          description,
-        });
-      })
-      .then(() => {
-        setTimeout(() => updateFeeds(watchedState, feedUrl), 5000);
-      })
-      .catch((error) => {
-        if (error.message === 'Error parsing XML') {
-          watchedState.formState.processError = 'feedback.invalidResource';
-          watchedState.formState.processState = 'failed';
-          watchedState.formState.valid = true;
-        }
-        if (error.message === 'Network Error') {
-          watchedState.formState.processError = 'feedback.networkError';
-          watchedState.formState.processState = 'failed';
-          watchedState.formState.valid = true;
-        }
-      });
+    handleGetRequest(feedUrl, watchedState);
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
     watchedState.formState.validError = message;
