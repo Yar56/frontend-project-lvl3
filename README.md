@@ -3,7 +3,6 @@
   <br>
   <h1>Rss aggregator<img align="center" src="https://img.icons8.com/color/60/000000/rss.png" alt='Logo of the project'></h1>
   <h2>All your channels are here</h2>
-<br>
 </div>
 
 ### Hexlet tests and linter status:
