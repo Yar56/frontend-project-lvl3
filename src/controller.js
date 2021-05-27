@@ -65,9 +65,11 @@ export default (observer) => (buttonEvent) => {
           watchedState.formState.processState = 'failed';
           watchedState.formState.valid = true;
         }
-        watchedState.formState.processError = 'feedback.networkError';
-        watchedState.formState.processState = 'failed';
-        watchedState.formState.valid = true;
+        if (error.message === 'Network Error') {
+          watchedState.formState.processError = 'feedback.networkError';
+          watchedState.formState.processState = 'failed';
+          watchedState.formState.valid = true;
+        }
       });
   }).catch(({ message }) => {
     watchedState.formState.processSucces = '';
