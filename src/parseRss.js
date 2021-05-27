@@ -5,9 +5,11 @@ export default (xml) => {
   if (document.getElementsByTagNameNS(parsererrorNS, 'parsererror').length > 0) {
     throw new Error('Error parsing XML');
   }
-  const channel = document.querySelector('channel');
-  const [title, description] = [...channel.children].filter((el) => el.tagName === 'title' || el.tagName === 'description');
+  // const channel = document.querySelector('channel');
+  // console.log([...channel.children])
 
+  const title = document.querySelector('title');
+  const description = document.querySelector('description');
   const posts = Array.from(document.querySelectorAll('item'));
 
   const postsContent = posts.reduce((acc, item) => {
