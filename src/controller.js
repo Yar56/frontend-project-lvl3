@@ -22,18 +22,18 @@ const updateFeeds = (state, url) => {
     .finally(() => setTimeout(() => updateFeeds(state, url), 5000));
 };
 
-export default (observer) => (e) => {
-  e.preventDefault();
+export default (observer) => (buttonEvent) => {
+  buttonEvent.preventDefault();
   const watchedState = observer;
   watchedState.formState.valid = true;
 
-  const data = new FormData(e.currentTarget);
-  const queryString = data.get('url');
-  const isValid = validateUrl(watchedState.feeds, queryString);
+  const data = new FormData(buttonEvent.target);
+  const feedUrl = data.get('url');
+  const isValid = validateUrl(watchedState.feeds, feedUrl);
 
   isValid.then(() => {
     watchedState.formState.processState = 'sending';
-    getRss(queryString)
+    getRss(feedUrl)
       .then((response) => {
         const [{ title, description }, postsContent] = parseXml(response.data.contents);
 
@@ -51,13 +51,13 @@ export default (observer) => (e) => {
         watchedState.posts.unshift(...postsWithId);
         watchedState.feeds.unshift({
           feedId,
-          feedUrl: queryString,
+          feedUrl,
           title,
           description,
         });
       })
       .then(() => {
-        setTimeout(() => updateFeeds(watchedState, queryString), 5000);
+        setTimeout(() => updateFeeds(watchedState, feedUrl), 5000);
       })
       .catch((error) => {
         if (error.message === 'Error parsing XML') {

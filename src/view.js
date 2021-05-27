@@ -1,26 +1,17 @@
 import onChange from 'on-change';
-import { setLocale } from 'yup';
 
-export default (state, i18nInstance) => {
-  setLocale({
-    string: {
-      url: i18nInstance.t('feedback.invalidUrl'),
-    },
-    mixed: {
-      default: i18nInstance.t('feedback.duplicate'),
-    },
-  });
-  const elements = {
-    form: document.querySelector('.rss-form'),
-    submitButton: document.querySelector('button[type="submit"]'),
-    divFeedBack: document.querySelector('.feedback'),
-    input: document.querySelector('.rss-form input'),
-  };
+export default (state, i18nInstance, elements) => {
+  const {
+    form,
+    submitButton,
+    divFeedBack,
+    input,
+  } = elements;
 
   const renderFeedback = (value, style) => {
     elements.divFeedBack.classList.remove('text-success', 'text-danger');
     elements.divFeedBack.classList.add(style);
-    elements.divFeedBack.textContent = value;
+    divFeedBack.textContent = value;
   };
 
   const renderFeeds = (feeds) => {
@@ -106,19 +97,19 @@ export default (state, i18nInstance) => {
 
   const processStateHandle = (processState, watchedState) => {
     if (elements.input.hasAttribute('readonly')) {
-      elements.input.removeAttribute('readonly', '');
+      input.removeAttribute('readonly', '');
     }
     if (elements.submitButton.hasAttribute('disabled')) {
-      elements.submitButton.disabled = false;
+      submitButton.disabled = false;
     }
     switch (processState) {
       case 'sending':
         elements.input.setAttribute('readonly', '');
-        elements.submitButton.disabled = true;
+        submitButton.disabled = true;
         break;
       case 'finished':
         renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
-        elements.form.reset();
+        form.reset();
         break;
       case 'failed':
         renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
@@ -132,7 +123,7 @@ export default (state, i18nInstance) => {
     if (!isValid) {
       elements.divFeedBack.classList.add('text-danger');
       elements.input.classList.add('is-invalid');
-      elements.divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
+      divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
     }
     if (isValid) {
       elements.input.classList.remove('is-invalid');

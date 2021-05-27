@@ -1,10 +1,10 @@
 import * as yup from 'yup';
 
-export default (feeds, string) => {
+export default (feeds, newFeedUrl) => {
   const schema = yup.string().url()
     .test('dupl', () => {
-      const res = feeds.find((el) => el.feedUrl === string);
+      const res = feeds.find((el) => el.feedUrl === newFeedUrl);
       return res === undefined;
     });
-  return schema.validate(string);
+  return schema.validate(newFeedUrl);
 };
