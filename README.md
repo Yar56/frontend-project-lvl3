@@ -1,9 +1,9 @@
 <div align="center">
   <br>
   <h1>Rss aggregator<img align="center" src="https://img.icons8.com/color/60/000000/rss.png" alt='Logo of the project'></h1>
-  <div style="font-size: 20px;">All your channels are here</div>
+  <h3>All your channels are here</h3>
 </div>
-
+<br>
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/Yar56/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/Yar56/frontend-project-lvl3/actions)
