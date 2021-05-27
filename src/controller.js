@@ -22,6 +22,23 @@ const updateFeeds = (state, url) => {
     .finally(() => setTimeout(() => updateFeeds(state, url), 5000));
 };
 
+const updateState = ([{ title, description }, postsContent], posts, feeds, feedUrl) => {
+  const feedId = _.uniqueId();
+  const postsWithId = postsContent.map((post) => {
+    _.set(post, 'state', 'active');
+    _.set(post, 'id', _.uniqueId());
+    _.set(post, 'feedId', feedId);
+    return post;
+  });
+  posts.unshift(...postsWithId);
+  feeds.unshift({
+    feedId,
+    feedUrl,
+    title,
+    description,
+  });
+};
+
 const handleGetRequest = (feedUrl, state) => {
   const {
     formState,
@@ -31,26 +48,12 @@ const handleGetRequest = (feedUrl, state) => {
 
   getRss(feedUrl)
     .then((response) => {
-      const [{ title, description }, postsContent] = parseXml(response.data.contents);
-
+      const dataContent = parseXml(response.data.contents);
       formState.processSucces = 'feedback.succesLoad';
       formState.processState = 'finished';
       formState.valid = true;
 
-      const feedId = _.uniqueId();
-      const postsWithId = postsContent.map((post) => {
-        _.set(post, 'state', 'active');
-        _.set(post, 'id', _.uniqueId());
-        _.set(post, 'feedId', feedId);
-        return post;
-      });
-      posts.unshift(...postsWithId);
-      feeds.unshift({
-        feedId,
-        feedUrl,
-        title,
-        description,
-      });
+      updateState(dataContent, posts, feeds, feedUrl);
     })
     .then(() => {
       setTimeout(() => updateFeeds(state, feedUrl), 5000);
