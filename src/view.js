@@ -27,13 +27,21 @@ export default (state, i18nInstance) => {
     const feedsContainer = document.querySelector('.feeds');
     const ulfeed = document.createElement('ul');
     ulfeed.classList.add('list-group', 'mb-5');
-    const feedsContent = feeds.map((feed) => `
-      <li class="list-group-item">
-        <h3>${feed.title}</h3>
-        <p>${feed.description}</p>
-      </li>`);
-    ulfeed.innerHTML = feedsContent.join('');
-    feedsContainer.innerHTML = `<h2>Фиды</h2>${ulfeed.outerHTML}`;
+
+    feeds.map(({ title, description }) => {
+      const li = document.createElement('li');
+      const h3 = document.createElement('h3');
+      const p = document.createElement('p');
+
+      li.classList.add('list-group-item');
+      h3.textContent = title;
+      p.textContent = description;
+      li.append(...[h3, p]);
+      return li;
+    }).map((li) => ulfeed.append(li));
+    feedsContainer.innerHTML = '';
+    feedsContainer.innerHTML = '<h2>Фиды</h2>';
+    feedsContainer.appendChild(ulfeed);
   };
 
   const renderModal = (content, link, postState) => {
@@ -88,9 +96,7 @@ export default (state, i18nInstance) => {
         currentPost.state = 'inactive';
         renderModal(post, a, currentPost.state);
       });
-      li.appendChild(a);
-      li.appendChild(btn);
-
+      li.append(...[a, btn]);
       return li;
     }).map((li) => ulpost.appendChild(li));
     postsContainer.innerHTML = '';
