@@ -3,10 +3,10 @@ import _ from 'lodash';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
 
-const getRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}&disableCache=true`);
+const addProxy = (url) => `https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}&disableCache=true`;
 
 const updateFeeds = (state, url) => {
-  getRss(url)
+  axios.get(addProxy(url))
     .then((res) => parseXml(res.data.contents))
     .then(([{ title }, postsContent]) => {
       const feed = state.feeds.find((el) => el.title === title);
@@ -46,7 +46,7 @@ const handleGetRequest = (feedUrl, state) => {
     feeds,
   } = state;
 
-  getRss(feedUrl)
+  axios.get(addProxy(feedUrl))
     .then((response) => {
       const dataContent = parseXml(response.data.contents);
       formState.processSucces = 'feedback.succesLoad';
