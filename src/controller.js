@@ -74,15 +74,15 @@ export default (observer) => (buttonEvent) => {
 
   const data = new FormData(buttonEvent.target);
   const feedUrl = data.get('url');
-  const isValid = validateUrl(watchedState.feeds, feedUrl);
 
-  isValid.then(() => {
-    watchedState.formState.processState = 'sending';
-    handleGetRequest(feedUrl, watchedState);
-  }).catch(({ message }) => {
-    watchedState.formState.processSucces = '';
-    watchedState.formState.validError = message;
-    watchedState.formState.processState = 'pending';
-    watchedState.formState.valid = false;
-  });
+  validateUrl(watchedState.feeds, feedUrl)
+    .then(() => {
+      watchedState.formState.processState = 'sending';
+      handleGetRequest(feedUrl, watchedState);
+    }).catch(({ message }) => {
+      watchedState.formState.processSucces = '';
+      watchedState.formState.validError = message;
+      watchedState.formState.processState = 'pending';
+      watchedState.formState.valid = false;
+    });
 };
