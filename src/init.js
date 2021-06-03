@@ -43,6 +43,5 @@ export default () => {
   });
 
   const watchedState = view(state, i18nInstance, elements);
-  const form = document.querySelector('.rss-form');
-  form.addEventListener('submit', controller(watchedState));
+  elements.form.addEventListener('submit', controller(watchedState));
 };
