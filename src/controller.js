@@ -24,12 +24,7 @@ const updateFeeds = (state, url) => {
 
 const updateState = ([{ title, description }, postsContent], posts, feeds, feedUrl) => {
   const feedId = _.uniqueId();
-  const postsWithId = postsContent.map((post) => {
-    _.set(post, 'state', 'active');
-    _.set(post, 'id', _.uniqueId());
-    _.set(post, 'feedId', feedId);
-    return post;
-  });
+  const postsWithId = postsContent.map((post) => ({ ...{ state: 'active', id: _.uniqueId(), feedId }, ...post }));
   posts.unshift(...postsWithId);
   feeds.unshift({
     feedId,
