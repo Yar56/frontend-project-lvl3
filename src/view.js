@@ -36,13 +36,13 @@ export default (state, i18nInstance, elements) => {
   };
 
   const renderModal = (content, link, postState) => {
-    link.classList.remove('font-weight-bold', 'font-weight-normal');
+    link.classList.remove('fw-bold', 'fw-normal');
 
     if (postState === 'active') {
-      link.classList.add('font-weight-bold');
+      link.classList.add('fw-bold');
     }
     if (postState === 'inactive') {
-      link.classList.add('font-weight-normal');
+      link.classList.add('fw-normal');
     }
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
@@ -64,10 +64,10 @@ export default (state, i18nInstance, elements) => {
       const btn = document.createElement('button');
 
       if (post.state === 'active') {
-        a.classList.add('font-weight-bold');
+        a.classList.add('fw-bold');
       }
       if (post.state === 'inactive') {
-        a.classList.add('font-weight-normal');
+        a.classList.add('fw-normal');
       }
 
       a.setAttribute('href', `${post.link}`);
