@@ -9,8 +9,8 @@ export default (state, i18nInstance, elements) => {
   } = elements;
 
   const renderFeedback = (value, style) => {
-    elements.divFeedBack.classList.remove('text-success', 'text-danger');
-    elements.divFeedBack.classList.add(style);
+    divFeedBack.classList.remove('text-success', 'text-danger');
+    divFeedBack.classList.add(style);
     divFeedBack.textContent = value;
   };
 
@@ -47,9 +47,9 @@ export default (state, i18nInstance, elements) => {
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
-    modalTitle.textContent = content.title;
-    modalBody.textContent = content.description;
-    modalLink.setAttribute('href', content.link);
+    modalTitle.textContent = content.postTitle;
+    modalBody.textContent = content.postDescription;
+    modalLink.setAttribute('href', content.postLink);
   };
 
   const renderPosts = (posts) => {
@@ -58,33 +58,40 @@ export default (state, i18nInstance, elements) => {
     ulpost.classList.add('list-group');
 
     posts.map((post) => {
+      const {
+        postTitle,
+        postLink,
+        postState,
+        postId,
+      } = post;
+
       const li = document.createElement('li');
       li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start');
       const a = document.createElement('a');
       const btn = document.createElement('button');
 
-      if (post.state === 'active') {
+      if (postState === 'active') {
         a.classList.add('fw-bold');
       }
-      if (post.state === 'inactive') {
+      if (postState === 'inactive') {
         a.classList.add('fw-normal');
       }
 
-      a.setAttribute('href', `${post.link}`);
-      a.setAttribute('data-id', `${post.id}`);
+      a.setAttribute('href', `${postLink}`);
+      a.setAttribute('data-id', `${postId}`);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
-      a.textContent = post.title;
+      a.textContent = postTitle;
       btn.classList.add('btn', 'btn-primary', 'btn-sm');
       btn.setAttribute('type', 'button');
-      btn.setAttribute('data-id', `${post.id}`);
+      btn.setAttribute('data-id', `${postId}`);
       btn.setAttribute('data-bs-toggle', 'modal');
       btn.setAttribute('data-bs-target', '#modal');
       btn.textContent = 'Просмотр';
-      btn.addEventListener('click', (e) => {
-        const { id } = e.target.dataset;
-        const currentPost = posts.find((el) => el.id === id);
-        currentPost.state = 'inactive';
+      btn.addEventListener('click', ({ target }) => {
+        const { id } = target.dataset;
+        const currentPost = posts.find((el) => el.postId === id);
+        currentPost.postState = 'inactive';
         renderModal(post, a, currentPost.state);
       });
       li.append(...[a, btn]);
@@ -96,15 +103,15 @@ export default (state, i18nInstance, elements) => {
   };
 
   const processStateHandle = (processState, watchedState) => {
-    if (elements.input.hasAttribute('readonly')) {
+    if (input.hasAttribute('readonly')) {
       input.removeAttribute('readonly', '');
     }
-    if (elements.submitButton.hasAttribute('disabled')) {
+    if (submitButton.hasAttribute('disabled')) {
       submitButton.disabled = false;
     }
     switch (processState) {
       case 'sending':
-        elements.input.setAttribute('readonly', '');
+        input.setAttribute('readonly', '');
         submitButton.disabled = true;
         break;
       case 'finished':
@@ -121,12 +128,12 @@ export default (state, i18nInstance, elements) => {
 
   const validationHandle = (isValid, watchedState) => {
     if (!isValid) {
-      elements.divFeedBack.classList.add('text-danger');
-      elements.input.classList.add('is-invalid');
+      divFeedBack.classList.add('text-danger');
+      input.classList.add('is-invalid');
       divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
     }
     if (isValid) {
-      elements.input.classList.remove('is-invalid');
+      input.classList.remove('is-invalid');
     }
   };
 

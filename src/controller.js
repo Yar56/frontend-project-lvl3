@@ -8,10 +8,10 @@ const addProxy = (url) => `https://hexlet-allorigins.herokuapp.com/get?url=${enc
 const updateFeeds = (state, url) => {
   axios.get(addProxy(url))
     .then((res) => parseXml(res.data.contents))
-    .then(([{ title }, postsContent]) => {
+    .then(({ title, postsContent }) => {
       const feed = state.feeds.find((el) => el.title === title);
       const oldPosts = state.posts.filter(({ feedId }) => feedId === feed.feedId);
-      const newPosts = _.differenceBy(postsContent, oldPosts, 'link');
+      const newPosts = _.differenceBy(postsContent, oldPosts, 'postLink');
       const newPostsWithId = newPosts.map((post) => ({
         ...post,
         feedId: feed.feedId,
@@ -22,9 +22,9 @@ const updateFeeds = (state, url) => {
     .finally(() => setTimeout(() => updateFeeds(state, url), 5000));
 };
 
-const updateState = ([{ title, description }, postsContent], posts, feeds, feedUrl) => {
+const updateState = ({ title, description, postsContent }, posts, feeds, feedUrl) => {
   const feedId = _.uniqueId();
-  const postsWithId = postsContent.map((post) => ({ ...{ state: 'active', id: _.uniqueId(), feedId }, ...post }));
+  const postsWithId = postsContent.map((post) => ({ ...{ postState: 'active', postId: _.uniqueId(), feedId }, ...post }));
   posts.unshift(...postsWithId);
   feeds.unshift({
     feedId,
