@@ -44,23 +44,24 @@ const handleGetRequest = (feedUrl, state) => {
   axios.get(addProxy(feedUrl))
     .then((response) => {
       const dataContent = parseXml(response.data.contents);
+
       formState.processSucces = 'feedback.succesLoad';
       formState.processState = 'finished';
       formState.valid = true;
 
-      updateState(dataContent, posts, feeds, feedUrl);
+      return updateState(dataContent, posts, feeds, feedUrl);
     })
     .then(() => {
       setTimeout(() => updateFeeds(state, feedUrl), 5000);
     })
     .catch((error) => {
-      if (error.message === 'Error parsing XML') {
-        formState.processError = 'feedback.invalidResource';
+      console.log(error);
+      if (axios.isAxiosError(error)) {
+        formState.processError = 'feedback.networkError';
         formState.processState = 'failed';
         formState.valid = true;
-      }
-      if (error.message === 'Network Error') {
-        formState.processError = 'feedback.networkError';
+      } else {
+        formState.processError = 'feedback.invalidResource';
         formState.processState = 'failed';
         formState.valid = true;
       }

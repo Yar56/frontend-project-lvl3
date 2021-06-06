@@ -6,6 +6,7 @@ export default (xml) => {
   if (parseError) {
     throw new Error('Error parsing XML');
   }
+
   const title = document.querySelector('title').textContent;
   const description = document.querySelector('description').textContent;
   const posts = document.querySelectorAll('item');
