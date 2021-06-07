@@ -9,8 +9,8 @@ export default (xml) => {
 
   const title = document.querySelector('title').textContent;
   const description = document.querySelector('description').textContent;
-  const posts = document.querySelectorAll('item');
-  const postsContent = [...posts].map((post) => {
+  const items = document.querySelectorAll('item');
+  const posts = [...items].map((post) => {
     const postTitle = post.querySelector('title').textContent;
     const postLink = post.querySelector('link').textContent;
     const postDescription = post.querySelector('description').textContent;
@@ -20,6 +20,6 @@ export default (xml) => {
   return {
     title,
     description,
-    postsContent,
+    posts,
   };
 };
