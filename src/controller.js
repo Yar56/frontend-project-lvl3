@@ -3,10 +3,22 @@ import _ from 'lodash';
 import validateUrl from './validateUrl.js';
 import parseXml from './parseRss.js';
 
-const addProxy = (uri) => new URL(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(uri)}&disableCache=true`);
+const createUrl = (uri) => {
+  const feedUrl = uri;
+  const isDisableCache = true;
+  const proxy = 'https://hexlet-allorigins.herokuapp.com/';
+  const pathName = 'get';
+
+  const url = new URL(proxy);
+  url.pathname = pathName;
+  url.searchParams.set('url', feedUrl);
+  url.searchParams.set('disableCache', isDisableCache);
+  console.log(url);
+  return url;
+};
 
 const updateFeeds = (state, updatedUrl) => {
-  axios.get(addProxy(updatedUrl))
+  axios.get(createUrl(updatedUrl))
     .then((res) => parseXml(res.data.contents))
     .then(({ title, postsContent }) => {
       const feed = state.feeds.find((el) => el.title === title);
@@ -41,7 +53,7 @@ const handleGetRequest = (feedUrl, state) => {
     feeds,
   } = state;
 
-  axios.get(addProxy(feedUrl))
+  axios.get(createUrl(feedUrl))
     .then((response) => {
       const dataContent = parseXml(response.data.contents);
 
