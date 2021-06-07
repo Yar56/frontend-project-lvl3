@@ -2,9 +2,10 @@ export default (xml) => {
   const parser = new DOMParser();
   const document = parser.parseFromString(xml, 'application/xml');
   const parseError = document.querySelector('parsererror');
-
   if (parseError) {
-    throw new Error('Error parsing XML');
+    const errorObject = new Error(parseError.textContent);
+    errorObject.isParsingError = true;
+    throw errorObject;
   }
 
   const title = document.querySelector('title').textContent;

@@ -67,11 +67,12 @@ const handleGetRequest = (feedUrl, state) => {
     })
     .catch((error) => {
       console.log(error);
-      if (axios.isAxiosError(error)) {
+      if (error.isAxiosError) {
         formState.processError = 'feedback.networkError';
         formState.processState = 'failed';
         formState.valid = true;
-      } else {
+      }
+      if (error.isParsingError) {
         formState.processError = 'feedback.invalidResource';
         formState.processState = 'failed';
         formState.valid = true;
