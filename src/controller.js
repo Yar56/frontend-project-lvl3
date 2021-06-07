@@ -33,9 +33,9 @@ const updateFeeds = (state, updatedUrl) => {
     .finally(() => setTimeout(() => updateFeeds(state, updatedUrl), 5000));
 };
 
-const updateState = ({ title, description, postsContent }, posts, feeds, feedUrl) => {
+const updateState = ({ title, description, articles }, posts, feeds, feedUrl) => {
   const feedId = _.uniqueId();
-  const postsWithId = postsContent.map((post) => ({ ...{ postState: 'active', postId: _.uniqueId(), feedId }, ...post }));
+  const postsWithId = articles.map((post) => ({ ...{ postState: 'active', postId: _.uniqueId(), feedId }, ...post }));
   posts.unshift(...postsWithId);
   feeds.unshift({
     feedId,
