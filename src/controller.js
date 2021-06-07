@@ -13,7 +13,6 @@ const createUrl = (uri) => {
   url.pathname = pathName;
   url.searchParams.set('url', feedUrl);
   url.searchParams.set('disableCache', isDisableCache);
-  console.log(url);
   return url;
 };
 
