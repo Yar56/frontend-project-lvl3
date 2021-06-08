@@ -105,22 +105,20 @@ export default (state, i18nInstance, elements) => {
   };
 
   const processStateHandle = (processState, watchedState) => {
-    if (input.hasAttribute('readonly')) {
-      input.removeAttribute('readonly', '');
-    }
-    if (submitButton.hasAttribute('disabled')) {
-      submitButton.disabled = false;
-    }
     switch (processState) {
       case 'sending':
         input.setAttribute('readonly', '');
         submitButton.disabled = true;
         break;
       case 'finished':
+        input.removeAttribute('readonly', '');
+        submitButton.disabled = false;
         renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
         form.reset();
         break;
       case 'failed':
+        input.removeAttribute('readonly', '');
+        submitButton.disabled = false;
         renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
         break;
       default:
