@@ -39,7 +39,7 @@ export default () => {
       url: i18nInstance.t('feedback.invalidUrl'),
     },
     mixed: {
-      default: i18nInstance.t('feedback.duplicate'),
+      notOneOf: i18nInstance.t('feedback.duplicate'),
     },
   });
 
