@@ -62,7 +62,7 @@ export default (state, i18nInstance, elements) => {
         title,
         link,
         postState,
-        postId,
+        id,
       } = post;
 
       const li = document.createElement('li');
@@ -78,20 +78,19 @@ export default (state, i18nInstance, elements) => {
       }
 
       a.setAttribute('href', `${link}`);
-      a.setAttribute('data-id', `${postId}`);
+      a.setAttribute('data-id', `${id}`);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
       a.textContent = title;
       btn.classList.add('btn', 'btn-primary', 'btn-sm');
       btn.setAttribute('type', 'button');
-      btn.setAttribute('data-id', `${postId}`);
+      btn.setAttribute('data-id', `${id}`);
       btn.setAttribute('data-bs-toggle', 'modal');
       btn.setAttribute('data-bs-target', '#modal');
       btn.textContent = `${i18nInstance.t('ui.viewButton')}`;
 
       btn.addEventListener('click', ({ target }) => {
-        const { id } = target.dataset;
-        const currentPost = posts.find((el) => el.postId === id);
+        const currentPost = posts.find((el) => el.id === target.dataset.id);
         currentPost.postState = 'inactive';
         renderModal(post, a, currentPost.state);
       });
@@ -113,13 +112,13 @@ export default (state, i18nInstance, elements) => {
       case 'finished':
         input.removeAttribute('readonly');
         submitButton.disabled = false;
-        renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
+        renderFeedback(i18nInstance.t(watchedState.formState.proccess.success), 'text-success');
         form.reset();
         break;
       case 'failed':
         input.removeAttribute('readonly');
         submitButton.disabled = false;
-        renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
+        renderFeedback(i18nInstance.t(watchedState.formState.proccess.error), 'text-danger');
         break;
       default:
         break;
@@ -139,7 +138,7 @@ export default (state, i18nInstance, elements) => {
 
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
-      case 'formState.processState':
+      case 'formState.proccess.state':
         processStateHandle(value, watchedState);
         break;
       case 'formState.valid':

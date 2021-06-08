@@ -35,7 +35,7 @@ const updateFeeds = (state, updatedUrl) => {
 
 const updateState = ({ title, description, items }, posts, feeds, feedUrl) => {
   const feedId = _.uniqueId();
-  const postsWithId = items.map((post) => ({ ...{ postState: 'active', postId: _.uniqueId(), feedId }, ...post }));
+  const postsWithId = items.map((post) => ({ ...{ postState: 'active', id: _.uniqueId(), feedId }, ...post }));
   posts.unshift(...postsWithId);
   feeds.unshift({
     feedId,
@@ -56,8 +56,8 @@ const handleGetRequest = (feedUrl, state) => {
     .then((response) => {
       const dataContent = parseXml(response.data.contents);
 
-      formState.processSucces = 'feedback.succesLoad';
-      formState.processState = 'finished';
+      formState.proccess.success = 'feedback.succesLoad';
+      formState.proccess.state = 'finished';
       formState.valid = true;
 
       return updateState(dataContent, posts, feeds, feedUrl);
@@ -68,13 +68,13 @@ const handleGetRequest = (feedUrl, state) => {
     .catch((error) => {
       console.log(error);
       if (error.isAxiosError) {
-        formState.processError = 'feedback.networkError';
-        formState.processState = 'failed';
+        formState.proccess.error = 'feedback.networkError';
+        formState.proccess.state = 'failed';
         formState.valid = true;
       }
       if (error.isParsingError) {
-        formState.processError = 'feedback.invalidResource';
-        formState.processState = 'failed';
+        formState.proccess.error = 'feedback.invalidResource';
+        formState.proccess.state = 'failed';
         formState.valid = true;
       }
     });
@@ -90,12 +90,12 @@ export default (observer) => (buttonEvent) => {
 
   validateUrl(watchedState.feeds, feedUrl)
     .then(() => {
-      watchedState.formState.processState = 'sending';
+      watchedState.formState.proccess.state = 'sending';
       handleGetRequest(feedUrl, watchedState);
     }).catch(({ message }) => {
-      watchedState.formState.processSucces = '';
+      watchedState.formState.proccess.success = '';
       watchedState.formState.validError = message;
-      watchedState.formState.processState = 'pending';
+      watchedState.formState.proccess.state = 'pending';
       watchedState.formState.valid = false;
     });
 };

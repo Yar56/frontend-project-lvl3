@@ -8,9 +8,14 @@ import 'bootstrap/js/dist/modal.js';
 export default () => {
   const state = {
     formState: {
-      processState: 'pending',
-      processError: null,
-      processSucces: null,
+      proccess: {
+        state: 'pending',
+        error: null,
+        success: null,
+      },
+      // processState: 'pending',
+      // processError: null,
+      // processSucces: null,
       valid: true,
       validError: '',
     },
