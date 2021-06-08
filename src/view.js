@@ -27,11 +27,11 @@ export default (state, i18nInstance, elements) => {
       li.classList.add('list-group-item');
       h3.textContent = title;
       p.textContent = description;
-      li.append(...[h3, p]);
+      li.append(h3, p);
       return li;
     }).map((li) => ulfeed.append(li));
     feedsContainer.innerHTML = '';
-    feedsContainer.innerHTML = '<h2>Фиды</h2>';
+    feedsContainer.innerHTML = `<h2>${i18nInstance.t('ui.channels')}</h2>`;
     feedsContainer.appendChild(ulfeed);
   };
 
@@ -87,18 +87,20 @@ export default (state, i18nInstance, elements) => {
       btn.setAttribute('data-id', `${postId}`);
       btn.setAttribute('data-bs-toggle', 'modal');
       btn.setAttribute('data-bs-target', '#modal');
-      btn.textContent = 'Просмотр';
+      btn.textContent = `${i18nInstance.t('ui.viewButton')}`;
+
       btn.addEventListener('click', ({ target }) => {
         const { id } = target.dataset;
         const currentPost = posts.find((el) => el.postId === id);
         currentPost.postState = 'inactive';
         renderModal(post, a, currentPost.state);
       });
-      li.append(...[a, btn]);
+
+      li.append(a, btn);
       return li;
     }).map((li) => ulpost.appendChild(li));
     postsContainer.innerHTML = '';
-    postsContainer.innerHTML = '<h2>Посты</h2>';
+    postsContainer.innerHTML = `<h2>${i18nInstance.t('ui.posts')}</h2>`;
     postsContainer.appendChild(ulpost);
   };
 

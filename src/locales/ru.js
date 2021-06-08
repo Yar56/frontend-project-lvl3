@@ -10,5 +10,10 @@ export default {
       networkError: 'Ошибка сети',
       invalidResource: 'Ресурс не содержит валидный RSS',
     },
+    ui: {
+      posts: 'Посты',
+      channels: 'Фиды',
+      viewButton: 'Просмотр',
+    },
   },
 };

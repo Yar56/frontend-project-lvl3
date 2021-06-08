@@ -10,5 +10,10 @@ export default {
       networkError: 'Network error',
       invalidResource: 'Resource does not contain valid RSS',
     },
+    ui: {
+      posts: 'Posts',
+      channels: 'Сhannels',
+      viewButton: 'Viewing',
+    },
   },
 };
