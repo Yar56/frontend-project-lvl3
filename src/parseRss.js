@@ -11,12 +11,12 @@ export default (xml) => {
   const title = document.querySelector('title').textContent;
   const description = document.querySelector('description').textContent;
 
-  const items = [...document.querySelectorAll('item')].map((post) => {
-    const postTitle = post.querySelector('title').textContent;
-    const postLink = post.querySelector('link').textContent;
-    const postDescription = post.querySelector('description').textContent;
-    return { postTitle, postLink, postDescription };
-  });
+  const items = [...document.querySelectorAll('item')]
+    .map((post) => ({
+      title: post.querySelector('title').textContent,
+      link: post.querySelector('link').textContent,
+      description: post.querySelector('description').textContent,
+    }));
 
   return {
     title,

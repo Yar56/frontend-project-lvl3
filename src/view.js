@@ -47,9 +47,9 @@ export default (state, i18nInstance, elements) => {
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
-    modalTitle.textContent = content.postTitle;
-    modalBody.textContent = content.postDescription;
-    modalLink.setAttribute('href', content.postLink);
+    modalTitle.textContent = content.title;
+    modalBody.textContent = content.description;
+    modalLink.setAttribute('href', content.link);
   };
 
   const renderPosts = (posts) => {
@@ -59,8 +59,8 @@ export default (state, i18nInstance, elements) => {
 
     posts.map((post) => {
       const {
-        postTitle,
-        postLink,
+        title,
+        link,
         postState,
         postId,
       } = post;
@@ -77,11 +77,11 @@ export default (state, i18nInstance, elements) => {
         a.classList.add('fw-normal');
       }
 
-      a.setAttribute('href', `${postLink}`);
+      a.setAttribute('href', `${link}`);
       a.setAttribute('data-id', `${postId}`);
       a.setAttribute('target', '_blank');
       a.setAttribute('rel', 'noopener noreferrer');
-      a.textContent = postTitle;
+      a.textContent = title;
       btn.classList.add('btn', 'btn-primary', 'btn-sm');
       btn.setAttribute('type', 'button');
       btn.setAttribute('data-id', `${postId}`);
