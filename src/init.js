@@ -21,28 +21,28 @@ export default () => {
   const defaultLanguage = 'ru';
   const i18nInstance = i18n.createInstance();
 
-  const elements = {
-    form: document.querySelector('.rss-form'),
-    submitButton: document.querySelector('button[type="submit"]'),
-    divFeedBack: document.querySelector('.feedback'),
-    input: document.querySelector('.rss-form input'),
-  };
-
-  i18nInstance.init({
+  return i18nInstance.init({
     lng: defaultLanguage,
     debug: false,
     resources,
-  });
+  }).then(() => {
+    const elements = {
+      form: document.querySelector('.rss-form'),
+      submitButton: document.querySelector('button[type="submit"]'),
+      divFeedBack: document.querySelector('.feedback'),
+      input: document.querySelector('.rss-form input'),
+    };
 
-  setLocale({
-    string: {
-      url: i18nInstance.t('feedback.invalidUrl'),
-    },
-    mixed: {
-      notOneOf: i18nInstance.t('feedback.duplicate'),
-    },
-  });
+    setLocale({
+      string: {
+        url: i18nInstance.t('feedback.invalidUrl'),
+      },
+      mixed: {
+        notOneOf: i18nInstance.t('feedback.duplicate'),
+      },
+    });
 
-  const watchedState = view(state, i18nInstance, elements);
-  elements.form.addEventListener('submit', controller(watchedState));
+    const watchedState = view(state, i18nInstance, elements);
+    elements.form.addEventListener('submit', controller(watchedState));
+  });
 };
