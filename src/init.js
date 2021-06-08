@@ -17,7 +17,7 @@ export default () => {
       // processError: null,
       // processSucces: null,
       valid: true,
-      validError: '',
+      validError: null,
     },
     feeds: [],
     posts: [],
