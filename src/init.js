@@ -3,6 +3,7 @@ import { setLocale } from 'yup';
 import resources from './locales';
 import view from './view.js';
 import controller from './controller.js';
+import 'bootstrap/js/dist/modal.js';
 
 export default () => {
   const state = {
