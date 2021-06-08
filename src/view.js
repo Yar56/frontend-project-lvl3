@@ -111,13 +111,13 @@ export default (state, i18nInstance, elements) => {
         submitButton.disabled = true;
         break;
       case 'finished':
-        input.removeAttribute('readonly', '');
+        input.removeAttribute('readonly');
         submitButton.disabled = false;
         renderFeedback(i18nInstance.t(watchedState.formState.processSucces), 'text-success');
         form.reset();
         break;
       case 'failed':
-        input.removeAttribute('readonly', '');
+        input.removeAttribute('readonly');
         submitButton.disabled = false;
         renderFeedback(i18nInstance.t(watchedState.formState.processError), 'text-danger');
         break;
