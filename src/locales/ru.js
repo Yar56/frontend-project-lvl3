@@ -9,6 +9,7 @@ export default {
       succesLoad: 'RSS успешно загружен',
       networkError: 'Ошибка сети',
       invalidResource: 'Ресурс не содержит валидный RSS',
+      unknown: 'Что-то пошло не так',
     },
     ui: {
       posts: 'Посты',

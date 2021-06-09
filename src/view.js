@@ -104,6 +104,7 @@ export default (state, i18nInstance, elements) => {
   };
 
   const processStateHandle = (processState, watchedState) => {
+    const { formState: { proccess: { error, success } } } = watchedState;
     switch (processState) {
       case 'sending':
         input.setAttribute('readonly', '');
@@ -112,13 +113,13 @@ export default (state, i18nInstance, elements) => {
       case 'finished':
         input.removeAttribute('readonly');
         submitButton.disabled = false;
-        renderFeedback(i18nInstance.t(watchedState.formState.proccess.success), 'text-success');
+        renderFeedback(i18nInstance.t([`feedback.${success}`, 'feedback.unknown']), 'text-success');
         form.reset();
         break;
       case 'failed':
         input.removeAttribute('readonly');
         submitButton.disabled = false;
-        renderFeedback(i18nInstance.t(watchedState.formState.proccess.error), 'text-danger');
+        renderFeedback(i18nInstance.t([`feedback.${error}`, 'feedback.unknown']), 'text-danger');
         break;
       default:
         break;
@@ -126,10 +127,11 @@ export default (state, i18nInstance, elements) => {
   };
 
   const validationHandle = (isValid, watchedState) => {
+    const { formState: { validError } } = watchedState;
     if (!isValid) {
       divFeedBack.classList.add('text-danger');
       input.classList.add('is-invalid');
-      divFeedBack.textContent = i18nInstance.t(watchedState.formState.validError);
+      divFeedBack.textContent = i18nInstance.t([`feedback.${validError}`, 'feedback.unknown']);
     }
     if (isValid) {
       input.classList.remove('is-invalid');

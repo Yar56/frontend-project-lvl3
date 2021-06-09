@@ -56,7 +56,7 @@ const handleGetRequest = (feedUrl, state) => {
     .then((response) => {
       const dataContent = parseXml(response.data.contents);
 
-      formState.proccess.success = 'feedback.succesLoad';
+      formState.proccess.success = 'succesLoad';
       formState.proccess.state = 'finished';
       formState.valid = true;
 
@@ -68,12 +68,12 @@ const handleGetRequest = (feedUrl, state) => {
     .catch((error) => {
       console.log(error);
       if (error.isAxiosError) {
-        formState.proccess.error = 'feedback.networkError';
+        formState.proccess.error = 'networkError';
         formState.proccess.state = 'failed';
         formState.valid = true;
       }
       if (error.isParsingError) {
-        formState.proccess.error = 'feedback.invalidResource';
+        formState.proccess.error = 'invalidResource';
         formState.proccess.state = 'failed';
         formState.valid = true;
       }
@@ -94,7 +94,7 @@ export default (observer) => (buttonEvent) => {
       handleGetRequest(feedUrl, watchedState);
     }).catch(({ message }) => {
       watchedState.formState.proccess.success = '';
-      watchedState.formState.validError = message;
+      watchedState.formState.validError = message.key;
       watchedState.formState.proccess.state = 'pending';
       watchedState.formState.valid = false;
     });

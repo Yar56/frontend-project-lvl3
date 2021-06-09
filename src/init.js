@@ -13,9 +13,6 @@ export default () => {
         error: null,
         success: null,
       },
-      // processState: 'pending',
-      // processError: null,
-      // processSucces: null,
       valid: true,
       validError: null,
     },
@@ -40,10 +37,10 @@ export default () => {
 
     setLocale({
       string: {
-        url: i18nInstance.t('feedback.invalidUrl'),
+        url: () => ({ key: 'invalidUrl' }),
       },
       mixed: {
-        notOneOf: i18nInstance.t('feedback.duplicate'),
+        notOneOf: () => ({ key: 'duplicate' }),
       },
     });
 
