@@ -11,10 +11,14 @@ export default {
       invalidResource: 'Resource does not contain valid RSS',
       unknown: 'Something went wrong',
     },
-    ui: {
+    mainTexts: {
       posts: 'Posts',
       channels: 'Сhannels',
       viewButton: 'Viewing',
+    },
+    modalTexts: {
+      'full-artcile': 'Read completely',
+      'close-modal': 'Сlose',
     },
   },
 };

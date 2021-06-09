@@ -31,7 +31,7 @@ export default (state, i18nInstance, elements) => {
       return li;
     }).map((li) => ulfeed.append(li));
     feedsContainer.innerHTML = '';
-    feedsContainer.innerHTML = `<h2>${i18nInstance.t('ui.channels')}</h2>`;
+    feedsContainer.innerHTML = `<h2>${i18nInstance.t('mainTexts.channels')}</h2>`;
     feedsContainer.appendChild(ulfeed);
   };
 
@@ -39,9 +39,13 @@ export default (state, i18nInstance, elements) => {
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
+    const modalClose = modalLink.nextElementSibling;
+
     modalTitle.textContent = content.title;
     modalBody.textContent = content.description;
     modalLink.setAttribute('href', content.link);
+    modalLink.textContent = i18nInstance.t('modalTexts.full-artcile');
+    modalClose.textContent = i18nInstance.t('modalTexts.close-modal');
   };
 
   const renderPosts = (posts, viewedPosts) => {
@@ -74,7 +78,7 @@ export default (state, i18nInstance, elements) => {
       btn.setAttribute('data-id', `${id}`);
       btn.setAttribute('data-bs-toggle', 'modal');
       btn.setAttribute('data-bs-target', '#modal');
-      btn.textContent = `${i18nInstance.t('ui.viewButton')}`;
+      btn.textContent = i18nInstance.t('mainTexts.viewButton');
 
       btn.addEventListener('click', ({ target }) => {
         viewedPosts.add(target.dataset.id);
@@ -85,7 +89,7 @@ export default (state, i18nInstance, elements) => {
       return li;
     }).map((li) => ulpost.appendChild(li));
     postsContainer.innerHTML = '';
-    postsContainer.innerHTML = `<h2>${i18nInstance.t('ui.posts')}</h2>`;
+    postsContainer.innerHTML = `<h2>${i18nInstance.t('mainTexts.posts')}</h2>`;
     postsContainer.appendChild(ulpost);
   };
 

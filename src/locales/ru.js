@@ -11,10 +11,14 @@ export default {
       invalidResource: 'Ресурс не содержит валидный RSS',
       unknown: 'Что-то пошло не так',
     },
-    ui: {
+    mainTexts: {
       posts: 'Посты',
       channels: 'Фиды',
       viewButton: 'Просмотр',
+    },
+    modalTexts: {
+      'full-artcile': 'Читать полностью',
+      'close-modal': 'Закрыть',
     },
   },
 };
