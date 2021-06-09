@@ -33,9 +33,10 @@ const updateFeeds = (state, updatedUrl) => {
     .finally(() => setTimeout(() => updateFeeds(state, updatedUrl), 5000));
 };
 
-const updateState = ({ title, description, items }, posts, feeds, feedUrl) => {
+const updateState = ({ title, description, items }, posts, viewedPosts, feeds, feedUrl) => {
   const feedId = _.uniqueId();
-  const postsWithId = items.map((post) => ({ ...{ postState: 'active', id: _.uniqueId(), feedId }, ...post }));
+  const postsWithId = items.map((post) => ({ ...{ id: _.uniqueId(), feedId }, ...post }));
+
   posts.unshift(...postsWithId);
   feeds.unshift({
     feedId,
@@ -50,6 +51,7 @@ const handleGetRequest = (feedUrl, state) => {
     formState,
     posts,
     feeds,
+    viewedPosts,
   } = state;
 
   axios.get(createUrl(feedUrl))
@@ -60,7 +62,7 @@ const handleGetRequest = (feedUrl, state) => {
       formState.proccess.state = 'finished';
       formState.valid = true;
 
-      return updateState(dataContent, posts, feeds, feedUrl);
+      return updateState(dataContent, posts, viewedPosts, feeds, feedUrl);
     })
     .then(() => {
       setTimeout(() => updateFeeds(state, feedUrl), 5000);

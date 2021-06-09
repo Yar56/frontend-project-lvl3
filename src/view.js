@@ -35,15 +35,7 @@ export default (state, i18nInstance, elements) => {
     feedsContainer.appendChild(ulfeed);
   };
 
-  const renderModal = (content, link, postState) => {
-    link.classList.remove('fw-bold', 'fw-normal');
-
-    if (postState === 'active') {
-      link.classList.add('fw-bold');
-    }
-    if (postState === 'inactive') {
-      link.classList.add('fw-normal');
-    }
+  const renderModal = (content) => {
     const modalTitle = document.querySelector('.modal-title');
     const modalBody = document.querySelector('.modal-body');
     const modalLink = document.querySelector('.full-article');
@@ -52,7 +44,7 @@ export default (state, i18nInstance, elements) => {
     modalLink.setAttribute('href', content.link);
   };
 
-  const renderPosts = (posts) => {
+  const renderPosts = (posts, viewedPosts) => {
     const postsContainer = document.querySelector('.posts');
     const ulpost = document.createElement('ul');
     ulpost.classList.add('list-group');
@@ -61,7 +53,6 @@ export default (state, i18nInstance, elements) => {
       const {
         title,
         link,
-        postState,
         id,
       } = post;
 
@@ -70,12 +61,8 @@ export default (state, i18nInstance, elements) => {
       const a = document.createElement('a');
       const btn = document.createElement('button');
 
-      if (postState === 'active') {
-        a.classList.add('fw-bold');
-      }
-      if (postState === 'inactive') {
-        a.classList.add('fw-normal');
-      }
+      const className = viewedPosts.has(id) ? 'fw-normal' : 'fw-bold';
+      a.classList.add(className);
 
       a.setAttribute('href', `${link}`);
       a.setAttribute('data-id', `${id}`);
@@ -90,9 +77,8 @@ export default (state, i18nInstance, elements) => {
       btn.textContent = `${i18nInstance.t('ui.viewButton')}`;
 
       btn.addEventListener('click', ({ target }) => {
-        const currentPost = posts.find((el) => el.id === target.dataset.id);
-        currentPost.postState = 'inactive';
-        renderModal(post, a, currentPost.state);
+        viewedPosts.add(target.dataset.id);
+        renderModal(post);
       });
 
       li.append(a, btn);
@@ -147,7 +133,10 @@ export default (state, i18nInstance, elements) => {
         validationHandle(value, watchedState);
         break;
       case 'posts':
-        renderPosts(watchedState.posts);
+        renderPosts(watchedState.posts, watchedState.viewedPosts);
+        break;
+      case 'viewedPosts':
+        renderPosts(watchedState.posts, watchedState.viewedPosts);
         break;
       case 'feeds':
         renderFeeds(watchedState.feeds);

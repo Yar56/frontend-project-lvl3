@@ -17,6 +17,7 @@ export default () => {
       validError: null,
     },
     feeds: [],
+    viewedPosts: new Set(),
     posts: [],
   };
 
